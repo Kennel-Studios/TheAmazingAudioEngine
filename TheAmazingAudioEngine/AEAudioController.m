@@ -1308,9 +1308,11 @@ static OSStatus ioUnitRenderNotifyCallback(void *inRefCon, AudioUnitRenderAction
 }
 
 BOOL AEAudioControllerRenderMainOutput(AEAudioController *audioController, AudioTimeStamp inTimeStamp, UInt32 inNumberFrames, AudioBufferList *ioData) {
+    AudioTimeStamp timestamp = inTimeStamp;
     channel_producer_arg_t arg = {
         .channel = audioController->_topChannel,
-        .inTimeStamp = inTimeStamp,
+        .timeStamp = timestamp,
+        .originalTimeStamp = inTimeStamp,
         .ioActionFlags = 0,
         .nextFilterIndex = 0
     };
