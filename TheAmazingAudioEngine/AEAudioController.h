@@ -692,6 +692,13 @@ typedef void (*AEAudioControllerMainThreadMessageHandler)(AEAudioController *aud
  */
 BOOL AEAudioControllerRenderMainOutput(AEAudioController *audioController, AudioTimeStamp inTimeStamp, UInt32 inNumberFrames, AudioBufferList *ioData);
 
+/*!
+ * Synchronize all channels to play.
+ *
+ */
+void AEChannelSetAllPlaying(AEAudioController *THIS,BOOL playing);
+void AEAudioControllerResetTimestamps(AEAudioController *THIS);
+
 ///@}
 #pragma mark - Filters
 /** @name Filters */

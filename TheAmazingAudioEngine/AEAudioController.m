@@ -1321,6 +1321,33 @@ BOOL AEAudioControllerRenderMainOutput(AEAudioController *audioController, Audio
     return result;
 }
 
+void AEChannelSetAllPlaying(AEAudioController *THIS,BOOL playing) {
+    AudioUnitParameterValue value = playing;
+    AEChannelGroupRef group = THIS->_topGroup;
+    for (int i=0;i < group->channelCount;i++){
+        if (group->channels[i]){
+            group->channels[i]->playing = value;
+        }
+    }
+    if ( group->mixerAudioUnit ) {
+        for (int i=0;i < group->channelCount;i++){
+            if (group->channels[i]){
+                OSStatus result = AudioUnitSetParameter(group->mixerAudioUnit, kMultiChannelMixerParam_Enable, kAudioUnitScope_Input, i, value, 0);
+                checkResult(result, "AudioUnitSetParameter(kMultiChannelMixerParam_Enable)");
+            }
+        }
+    }
+}
+
+void AEAudioControllerResetTimestamps(AEAudioController *THIS) {
+    AEChannelGroupRef group = THIS->_topGroup;
+    for (int i=0;i < group->channelCount;i++){
+        if (group->channels[i]){
+            group->channels[i]->timeStamp.mSampleTime = 0.0f;
+        }
+    }
+}
+
 #pragma mark - Filters
 
 - (void)addFilter:(id<AEAudioFilter>)filter {
